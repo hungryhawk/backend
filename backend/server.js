@@ -1,6 +1,6 @@
-const express = require('express');
-const cors = require('cors');
-const dotenv = require('dotenv').config();
+const express = require("express");
+const cors = require("cors");
+const dotenv = require("dotenv").config();
 
 const PORT = process.env.PORT || 8000;
 
@@ -10,11 +10,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 
-app.get('/', (req, res) => {
-  res.status(200).send('Hello');
+app.get("/", (req, res) => {
+  res.status(200).send("Hello");
 });
 
-app.use('/api', require('./routes/loginRoute'));
-app.use('/api', require('./routes/blockRoute'));
+app.use("/api", require("./routes/loginRoute"));
+app.use("/api", require("./routes/blockRoute"));
 
-app.listen(PORT, () => console.log('server ...'));
+app.listen(PORT, () => console.log("server ..."));
