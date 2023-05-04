@@ -1,12 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const { loginUser, registerUser } = require("../controllers/userController");
-const validInfo = require("../middleware/validInfo.js");
 const { check } = require("express-validator");
-const {
-  validateUserSignUp,
-  userValidation,
-} = require("../middleware/userValidation");
+// const {
+//   validateUserSignUp,
+//   userValidation,
+// } = require("../middleware/userValidation");
 
 router.post(
   "/login",

@@ -39,13 +39,13 @@ const loginUser = async (req, res) => {
   //   const token = await jwt.sign(username, process.env.jwtSecret, {
   //     expiresIn: '1hr',
   //   });
-  res.status(200).json({
-    id: user.rows[0].user_id,
-    username: user.rows[0].username,
-    age: user.rows[0].age,
-    token: token,
-  });
-  //   res.json(token);
+  // res.status(200).json({
+  //   id: user.rows[0].user_id,
+  //   username: user.rows[0].username,
+  //   age: user.rows[0].age,
+  //   token: token,
+  // });
+  res.status(200).json({ token: token });
 };
 
 const registerUser = async (req, res) => {
