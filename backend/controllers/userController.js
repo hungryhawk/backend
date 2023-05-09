@@ -30,7 +30,9 @@ const loginUser = async (req, res) => {
   const validPassword = await bcrypt.compare(password, user.rows[0].password);
 
   if (!validPassword) {
-    return res.status(401).json({ message: "Password or Email is incorrect" });
+    return res
+      .status(401)
+      .json({ message: "Password or username is incorrect" });
   }
 
   //   4. give the jwt token
