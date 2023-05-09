@@ -1,8 +1,5 @@
 const express = require("express");
 const cors = require("cors");
-const dotenv = require("dotenv").config();
-
-const PORT = process.env.PORT || 8000;
 
 const app = express();
 
@@ -17,4 +14,4 @@ app.get("/", (req, res) => {
 app.use("/api", require("./routes/userRoute"));
 app.use("/api", require("./routes/blockRoute"));
 
-app.listen(PORT, () => console.log("server ..."));
+app.listen(5000, () => console.log("server ..."));

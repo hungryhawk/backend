@@ -11,7 +11,7 @@ const refreshUser = async (req, res) => {
   if (!refreshTokens.includes(refreshToken)) {
     return res.status(403).json("Refresh Token is not valid");
   }
-  jwt.verify(refreshToken, process.env.refreshSecret, (err, user) => {
+  jwt.verify(refreshToken, "secret321", (err, user) => {
     err && console.log(err);
     refreshTokens = refreshTokens.filter((token) => token !== refreshToken);
     const newAccessToken = generateAccessToken(user);
@@ -28,12 +28,12 @@ const refreshUser = async (req, res) => {
 // -------------
 
 const generateAccessToken = (user) => {
-  return jwt.sign({ id: user }, process.env.jwtSecret, {
+  return jwt.sign({ id: user }, "secret123", {
     expiresIn: "20s",
   });
 };
 const generateRefreshToken = (user) => {
-  return jwt.sign({ id: user }, process.env.refreshSecret);
+  return jwt.sign({ id: user }, "secret321");
 };
 
 // ------------

@@ -1,5 +1,4 @@
 const JWT = require("jsonwebtoken");
-const dotenv = require("dotenv").config();
 const pool = require("../db.js");
 
 const requireAuth = async (req, res, next) => {
@@ -10,7 +9,7 @@ const requireAuth = async (req, res, next) => {
   const token = authorization.split(" ")[1];
 
   try {
-    const { user_id } = JWT.verify(token, process.env.jwtSecret);
+    const { user_id } = JWT.verify(token, "secret123");
     req.user = await pool.query(
       "SELECT user_id FROM users WHERE user_id = $1",
       [user_id]
