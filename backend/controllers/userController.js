@@ -5,6 +5,42 @@ const pool = require("../db.js");
 const bcrypt = require("bcrypt");
 const jwtGenerator = require("../utils/jwtGenerator.js");
 const { validationResult } = require("express-validator");
+const jwt = require("jsonwebtoken");
+
+let refreshTokens = [];
+
+const refreshUser = async (req, res) => {
+  const refreshToken = req.body.token;
+  if (!refreshToken) return res.status(401).json("You are not authenticated");
+  if (!refreshTokens.includes(refreshToken)) {
+    return res.status(403).json("Refresh Token is not valid");
+  }
+  jwt.verify(refreshToken, process.env.refreshSecret, (err, user) => {
+    err && console.log(err);
+    refreshTokens = refreshTokens.filter((token) => token !== refreshToken);
+    const newAccessToken = generateAccessToken(user);
+    const newRefreshToken = generateAccessToken(user);
+
+    refreshTokens.push(newRefreshToken);
+    res.status(200).json({
+      accessToken: newAccessToken,
+      refreshToken: newRefreshToken,
+    });
+  });
+};
+
+// -------------
+
+const generateAccessToken = (user) => {
+  return jwt.sign({ id: user }, process.env.jwtSecret, {
+    expiresIn: "20s",
+  });
+};
+const generateRefreshToken = (user) => {
+  return jwt.sign({ id: user }, process.env.refreshSecret);
+};
+
+// ------------
 
 const loginUser = async (req, res) => {
   const errors = validationResult(req);
@@ -37,7 +73,17 @@ const loginUser = async (req, res) => {
 
   //   4. give the jwt token
 
-  const token = jwtGenerator(user.rows[0].user_id);
+  // const token = jwtGenerator(user.rows[0].user_id);
+  // const accessToken = jwt.sign(
+  //   { id: user.rows[0].user_id },
+  //   process.env.jwtSecret,
+  //   { expiresIn: '20s' }
+  // );
+
+  const accessToken = generateAccessToken(user.rows[0].user_id);
+  const refreshToken = generateRefreshToken(user.rows[0].user_id);
+  refreshTokens.push(refreshToken);
+
   //   const token = await jwt.sign(username, process.env.jwtSecret, {
   //     expiresIn: '1hr',
   //   });
@@ -47,7 +93,11 @@ const loginUser = async (req, res) => {
   //   age: user.rows[0].age,
   //   token: token,
   // });
-  res.status(200).json({ token: token });
+  res.status(200).json({
+    username: user.rows[0].username,
+    token: accessToken,
+    refresh: refreshToken,
+  });
 };
 
 const registerUser = async (req, res) => {
@@ -117,4 +167,5 @@ const registerUser = async (req, res) => {
 module.exports = {
   loginUser,
   registerUser,
+  refreshUser,
 };
