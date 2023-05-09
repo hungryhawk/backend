@@ -7,11 +7,6 @@ const {
 } = require("../controllers/userController");
 const { check } = require("express-validator");
 
-// const {
-//   validateUserSignUp,
-//   userValidation,
-// } = require("../middleware/userValidation");
-
 router.post("/refresh", refreshUser);
 
 router.post(
@@ -78,8 +73,5 @@ router.post(
   ],
   registerUser
 );
-
-// router.post('/register', validInfo, registerUser);
-// router.post('/register', validateUserSignUp, userValidation, registerUser);
 
 module.exports = router;
